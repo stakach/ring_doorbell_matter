@@ -42,7 +42,7 @@ shards:
 
   ring_doorbell:
     git: https://github.com/stakach/ring_doorbell.git
-    version: 0.1.0+git.commit.65f1ea43f7a2ac18841b298030ad341b02d1e231
+    version: 0.1.0+git.commit.df4873e681df80c96539e4e6573c66d2cd431137
 
   spake2_plus:
     git: https://github.com/crystal-matter/spake2_plus.git
