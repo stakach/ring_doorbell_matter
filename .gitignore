@@ -1,0 +1,9 @@
+/docs/
+/lib/
+/bin/
+/.shards/
+*.dwarf
+
+# Credentials / runtime state
+/data/*.token
+/data/*.json

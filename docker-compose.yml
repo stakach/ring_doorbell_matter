@@ -1,0 +1,21 @@
+services:
+  ring-doorbell-matter:
+    build: .
+    # image: stakach/ring-doorbell-matter:latest
+    container_name: ring-doorbell-matter
+    network_mode: host # required for mDNS + Matter UDP
+    restart: unless-stopped
+    environment:
+      RING_TOKEN_FILE: /data/ring.token
+      MATTER_STORAGE_FILE: /data/ring_doorbell_matter_storage.json
+      MOTION_HOLD: "30"
+      BATTERY_POLL: "3600"
+      MOTION_TRIGGERS: "false"
+      LOG_LEVEL: info
+    volumes:
+      - ./data:/data
+    logging:
+      driver: json-file
+      options:
+        max-size: "10mb"
+        max-file: "1"

@@ -1,0 +1,25 @@
+name: ring_doorbell_matter
+version: 0.1.0
+
+dependencies:
+  matter:
+    github: Crystal-Matter/matter
+
+  ring_doorbell:
+    github: stakach/ring_doorbell
+
+  goban:
+    github: soya-daizu/goban
+
+development_dependencies:
+  ameba:
+    github: crystal-ameba/ameba
+
+authors:
+  - Stephen von Takach <steve@place.technology>
+
+targets:
+  ring_doorbell_matter:
+    main: src/main.cr
+
+license: MIT
