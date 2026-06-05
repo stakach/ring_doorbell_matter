@@ -34,6 +34,30 @@ codes only encode the 4 MSBs of the discriminator (3842 vs 3843 share them)
 plus the same test PIN — only one of the two may be in commissioning mode at
 a time when pairing by code.
 
+## Fix: battery not displayed in controllers (2026-06-05)
+
+User report: sensor works but no battery shown. Root cause (found via
+matter.js DeviceInformation.js): controllers decide a node is battery
+powered from a wildcard read of PowerSource FeatureMap + Status —
+`features.battery && status == Active`. crystal-matter's
+PowerSourceCluster (and OccupancySensingCluster) fell through to the
+Cluster::Base default for global attribute 0xFFFC, reporting FeatureMap = 0
+→ no BAT bit → controllers never showed a battery, even though
+BatPercentRemaining was readable directly (why the chip-tool attribute read
+in the first live test didn't catch it).
+
+Fixed upstream in crystal-matter@0fcf5e3 (encode_feature_map_global
+overrides + specs; 931 cluster specs green). Bridge re-locked and proven
+compliant with chip-tool against the live bridge:
+- `powersource read feature-map 12 1` → 2 (BAT)  — also via wildcard 0xFFFF
+- `powersource read status 12 1` → 1 (Active)
+- `powersource read bat-percent-remaining 12 1` → 124
+- `powersource read attribute-list 12 1` → 13 entries incl. all battery attrs
+- `occupancysensing read feature-map 12 1` → 2 (PIR)
+
+Lesson: chip-tool reads of specific attributes don't prove what controllers
+infer from FeatureMap/AttributeList — test the global attributes too.
+
 ## Design notes
 
 - Endpoints 1..N = doorbells sorted by Ring id (stable while the device set
